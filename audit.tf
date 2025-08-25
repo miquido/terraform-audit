@@ -23,7 +23,7 @@ resource "aws_budgets_budget" "monthly_cost_budget" {
 }
 
 resource "aws_s3_bucket" "cloudtrail_bucket" {
-  bucket = "${var.project}-${var.environment}-audit-cloudtrail"
+  bucket = lower("${var.project}-${var.environment}-audit-cloudtrail")
 }
 
 resource "aws_s3_bucket_policy" "cloudtrail_policy" {
@@ -61,7 +61,7 @@ resource "aws_s3_bucket_policy" "cloudtrail_policy" {
 
 resource "aws_cloudtrail" "management_events" {
   provider                      = aws.us-east-1
-  name                          = "${var.project}-${var.environment}-management-events"
+  name                          = lower("${var.project}-${var.environment}-management-events")
   s3_bucket_name                = aws_s3_bucket.cloudtrail_bucket.id
   include_global_service_events = true
   is_multi_region_trail         = false
