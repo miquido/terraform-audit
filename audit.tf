@@ -110,7 +110,7 @@ resource "aws_cloudwatch_event_rule" "iam_changes" {
 resource "aws_cloudwatch_event_target" "iam_changes_sns" {
   count = var.enable_iam_changes ? 1 : 0
   provider  = aws.us-east-1
-  rule      = aws_cloudwatch_event_rule.iam_changes.name
+  rule      = aws_cloudwatch_event_rule.iam_changes[count.index].name
   target_id = "IAMChangeSNSTopic"
   arn       = var.sns_virginia_arn
 }
