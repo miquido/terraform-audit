@@ -97,6 +97,7 @@ resource "aws_cloudwatch_event_target" "root_sign_in_sns" {
 }
 
 resource "aws_cloudwatch_event_rule" "iam_changes" {
+  count = var.enable_iam_changes ? 1 : 0
   provider    = aws.us-east-1
   name        = "${var.project}-${var.environment}-IAMChangeRule"
   description = "Events rule for monitoring IAM changes"
@@ -107,6 +108,7 @@ resource "aws_cloudwatch_event_rule" "iam_changes" {
 }
 
 resource "aws_cloudwatch_event_target" "iam_changes_sns" {
+  count = var.enable_iam_changes ? 1 : 0
   provider  = aws.us-east-1
   rule      = aws_cloudwatch_event_rule.iam_changes.name
   target_id = "IAMChangeSNSTopic"
