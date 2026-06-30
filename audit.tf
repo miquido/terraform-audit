@@ -6,18 +6,18 @@ resource "aws_budgets_budget" "monthly_cost_budget" {
   time_unit    = "MONTHLY"
 
   notification {
-    comparison_operator = "GREATER_THAN"
-    notification_type   = "FORECASTED"
-    threshold = 100
-    threshold_type      = "PERCENTAGE"
+    comparison_operator       = "GREATER_THAN"
+    notification_type         = "FORECASTED"
+    threshold                 = 100
+    threshold_type            = "PERCENTAGE"
     subscriber_sns_topic_arns = [var.sns_arn]
   }
 
   notification {
-    comparison_operator = "GREATER_THAN"
-    notification_type   = "ACTUAL"
-    threshold           = 90
-    threshold_type      = "PERCENTAGE"
+    comparison_operator       = "GREATER_THAN"
+    notification_type         = "ACTUAL"
+    threshold                 = 90
+    threshold_type            = "PERCENTAGE"
     subscriber_sns_topic_arns = [var.sns_arn]
   }
 }
@@ -97,18 +97,18 @@ resource "aws_cloudwatch_event_target" "root_sign_in_sns" {
 }
 
 resource "aws_cloudwatch_event_rule" "iam_changes" {
-  count = var.enable_iam_changes ? 1 : 0
+  count       = var.enable_iam_changes ? 1 : 0
   provider    = aws.us-east-1
   name        = "${var.project}-${var.environment}-IAMChangeRule"
   description = "Events rule for monitoring IAM changes"
   event_pattern = jsonencode({
-    "source": ["aws.iam"],
-    "detail-type": ["AWS API Call via CloudTrail"]
+    "source" : ["aws.iam"],
+    "detail-type" : ["AWS API Call via CloudTrail"]
   })
 }
 
 resource "aws_cloudwatch_event_target" "iam_changes_sns" {
-  count = var.enable_iam_changes ? 1 : 0
+  count     = var.enable_iam_changes ? 1 : 0
   provider  = aws.us-east-1
   rule      = aws_cloudwatch_event_rule.iam_changes[count.index].name
   target_id = "IAMChangeSNSTopic"
